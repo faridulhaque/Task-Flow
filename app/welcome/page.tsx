@@ -1,4 +1,5 @@
 import NavbarWc from "@/components/NavbarWc";
+import Link from "next/link";
 import { Typewriter } from "nextjs-simple-typewriter";
 import React from "react";
 
@@ -29,8 +30,8 @@ function page() {
           />
         </h2>
 
-        <button className="mt-10 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-200">
-          Get Started
+        <button className="cursor-pointer mt-10 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-200">
+          <Link href="/entry">Get Started</Link>
         </button>
       </main>
     </div>

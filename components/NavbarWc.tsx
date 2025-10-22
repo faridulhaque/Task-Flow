@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 function NavbarWc() {
@@ -6,7 +7,7 @@ function NavbarWc() {
       <div>Logo</div>
       <div>
         <button className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition">
-          Sign In
+          <Link href="/entry">Sign In</Link>
         </button>
       </div>
     </div>
