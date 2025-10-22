@@ -1,18 +1,42 @@
 "use client";
 import React, { useState } from "react";
 import Checkbox from "./Checkbox";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from "@/services/queries/authApi";
 
 function OnboardingForm() {
   const [viewPass, setViewPass] = useState(false);
   const pathname = usePathname();
+  const [login] = useLoginMutation<any>();
+  const [register] = useRegisterMutation<any>();
+  const router = useRouter();
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const email = e.currentTarget.email.value;
+    const password = e.currentTarget.password.value;
+
+    if (!email || !password) {
+      toast.error("Email & Password are required");
+    }
+    let result: any;
     if (pathname.includes("sign-in")) {
-      // call sign in function
+      result = await login({ email, password: password });
     } else {
-      // call sign up function
+      result = await login({ email, password: password });
+    }
+
+    if (result?.data?.token) {
+      localStorage.setItem("user", JSON.stringify(result?.data?.loggedInUser));
+      router.push("/");
+    } else if (result.error) {
+      toast.error(
+        `Failed to ${pathname.includes("sign-in") ? "sign in" : "sign up"}`
+      );
     }
   };
   return (
@@ -32,6 +56,7 @@ function OnboardingForm() {
         </label>
         <input
           type="email"
+          name="email"
           placeholder="Enter your email"
           className="w-full px-4 py-3 rounded-md bg-gray-600 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-gray-100 placeholder-gray-400 transition-all duration-200"
         />
@@ -83,6 +108,7 @@ function OnboardingForm() {
           </span>
         </label>
         <input
+          name="password"
           minLength={8}
           type={viewPass ? "text" : "password"}
           placeholder="Enter your password"
