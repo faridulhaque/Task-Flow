@@ -31,7 +31,7 @@ function page() {
         </h2>
 
         <button className="cursor-pointer mt-10 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-200">
-          <Link href="/entry">Get Started</Link>
+          <Link href="/sign-up">Get Started</Link>
         </button>
       </main>
     </div>
