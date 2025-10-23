@@ -6,6 +6,7 @@ import { TaskPayload } from "@/services/types";
 import { useAddTaskMutation } from "@/services/queries/othersApi";
 import { toast } from "react-toastify";
 function AddTaskForm() {
+  const today = new Date().toISOString().split("T")[0];
   const [email, setEmail] = useState("");
   const [addData, { isLoading: isAddingTask }] = useAddTaskMutation<any>();
 
@@ -96,6 +97,7 @@ function AddTaskForm() {
           Date
         </label>
         <input
+          min={today}
           type="date"
           name="date"
           placeholder="Enter task title"

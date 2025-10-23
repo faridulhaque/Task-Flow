@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Checkbox from "./Checkbox";
+
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import {
@@ -19,21 +19,29 @@ function OnboardingForm() {
     e.preventDefault();
     const email = e.currentTarget.email.value;
     const password = e.currentTarget.password.value;
+    const name = e.currentTarget.name.value;
 
-    if (!email || !password) {
-      toast.error("Email & Password are required");
-    }
     let result: any;
-    if (pathname.includes("sign-in")) {
-      result = await login({ email, password: password });
-    } else {
-      result = await login({ email, password: password });
-    }
 
-    if (result?.data?.token) {
-      localStorage.setItem("user", JSON.stringify(result?.data?.loggedInUser));
-      router.push("/");
-    } else if (result.error) {
+    try {
+      if (pathname.includes("sign-in")) {
+        result = await login({ email, password: password });
+      } else {
+        result = await register({ email, password: password, name });
+      }
+
+      if (result?.data?.data?.email) {
+        localStorage.setItem("user", JSON.stringify(result?.data?.data));
+        toast.success(
+          ` ${
+            pathname.includes("sign-in")
+              ? "signed in successfully"
+              : "signed up successfully"
+          }`
+        );
+        router.push("/");
+      }
+    } catch (error) {
       toast.error(
         `Failed to ${pathname.includes("sign-in") ? "sign in" : "sign up"}`
       );
@@ -50,11 +58,28 @@ function OnboardingForm() {
         <h2 className="text-3xl font-semibold text-center mb-6">Sign Up</h2>
       )}
 
+      {pathname.includes("sign-up") ? (
+        <div className="w-full">
+          <label className="block text-gray-300 mb-2 text-sm font-medium">
+            Name
+          </label>
+          <input
+            type="text"
+            name="name"
+            required={true}
+            placeholder="Enter your name"
+            className="w-full px-4 py-3 rounded-md bg-gray-600 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-gray-100 placeholder-gray-400 transition-all duration-200"
+          />
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="w-full">
         <label className="block text-gray-300 mb-2 text-sm font-medium">
           Email
         </label>
         <input
+          required
           type="email"
           name="email"
           placeholder="Enter your email"
@@ -108,6 +133,7 @@ function OnboardingForm() {
           </span>
         </label>
         <input
+          required
           name="password"
           minLength={8}
           type={viewPass ? "text" : "password"}

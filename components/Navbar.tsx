@@ -19,7 +19,7 @@ function Navbar() {
       <div>
         <button
           onClick={logout}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition"
+          className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition cursor-pointer"
         >
           Logout
         </button>
