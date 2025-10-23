@@ -8,7 +8,7 @@ function NavbarWc() {
   return (
     <div className="h-20 shadow-2xl bg-gray-700 text-white flex items-center justify-between px-5">
       <div>
-        <Link href="/">TASK FLOW</Link>
+        <Link className="text-2xl text-shadow-md" href="/">TASK FLOW</Link>
       </div>
       <div>
         {pathname === "/welcome" && (
