@@ -12,19 +12,18 @@ import {
 } from "@/services/queries/othersApi";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import notTaskFound from "ntf.webp";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [deleteTask, { isLoading: deleting }] = useDeleteTaskMutation<any>();
-  const [isData, setData] = useState(1);
+  const [isData, setData] = useState(0);
   const [changeStatus, { isLoading: changing }] = useChangeStatusMutation();
   const [email, setEmail] = useState(null);
 
   const { data: archivedTasks, isLoading: atLoading } =
     useGetArchiveTasksQuery<any>(email);
-  const { data: TodayTasks, isLoading: ttLoading } =
+  const { data: todayTasks, isLoading: ttLoading } =
     useGetTodayTaskQuery<any>(email);
 
   const { data: upcomingTasks, isLoading: uTasksLoading } =
@@ -61,7 +60,17 @@ export default function Home() {
       toast.error("Operation Failed");
     }
   };
-  console.log("isdata", isData);
+
+  useEffect(() => {
+    const total =
+      (archivedTasks?.length || 0) +
+      (todayTasks?.length || 0) +
+      (upcomingTasks?.length || 0);
+
+    setData(total);
+  }, [archivedTasks, todayTasks, upcomingTasks]);
+
+  console.log("isData", isData);
   return (
     <div className="min-h-screen bg-gray-800 text-white flex flex-col">
       <>
@@ -79,7 +88,7 @@ export default function Home() {
         ) : (
           <>
             <TodayTask
-              data={TodayTasks}
+              data={todayTasks}
               dataLoading={ttLoading}
               email={email}
               deleteTask={handleDeleteTask}
