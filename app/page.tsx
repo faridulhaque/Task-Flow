@@ -1,5 +1,12 @@
+import Navbar from "@/components/Navbar";
+import TodayTask from "@/components/TodayTask";
 import Image from "next/image";
 
 export default function Home() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <div className="min-h-screen bg-gray-800 text-white flex flex-col">
+      <Navbar />
+      <TodayTask></TodayTask>
+    </div>
+  );
 }

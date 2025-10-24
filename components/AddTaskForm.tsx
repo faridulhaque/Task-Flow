@@ -16,7 +16,7 @@ function AddTaskForm() {
     const description = e.currentTarget.description.value;
     const time = e.currentTarget.time.value;
     const date = e.currentTarget.date.value;
-    const complete = true;
+    const complete = false;
 
     const payload: TaskPayload = {
       email,

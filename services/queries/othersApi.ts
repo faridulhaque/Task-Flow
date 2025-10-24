@@ -1,9 +1,10 @@
 import { apiSlice } from "../apiSlice";
+import { TaskPayload } from "../types";
 
 const othersApi = apiSlice.injectEndpoints({
   endpoints: (builder: any) => ({
     addTask: builder.mutation({
-      query: (data: any) => ({
+      query: (data: TaskPayload) => ({
         url: "/task/add",
         method: "POST",
         body: data,
