@@ -12,9 +12,9 @@ const othersApi = apiSlice.injectEndpoints({
       invalidatesTags: ["tasks"],
     }),
 
-    getAllTask: builder.query({
+    getUpcomingTasks: builder.query({
       query: (email: string) => ({
-        url: `/task/all/${email}`,
+        url: `/task/upcoming/${email}`,
         method: "GET",
       }),
       providesTags: ["tasks"],
@@ -30,17 +30,16 @@ const othersApi = apiSlice.injectEndpoints({
 
     getArchiveTasks: builder.query({
       query: (email: string) => ({
-        url: `/task/archive/${email}`,
+        url: `/task/previous/${email}`,
         method: "GET",
       }),
       providesTags: ["tasks"],
     }),
 
     changeStatus: builder.mutation({
-      query: (data: any) => ({
-        url: `/task/status/${data?.id}`,
+      query: (id: string) => ({
+        url: `/task/status/${id}`,
         method: "PUT",
-        body: data,
       }),
       invalidatesTags: ["tasks"],
     }),
@@ -59,7 +58,7 @@ const othersApi = apiSlice.injectEndpoints({
 
 export const {
   useAddTaskMutation,
-  useGetAllTaskQuery,
+  useGetUpcomingTasksQuery,
   useGetTodayTaskQuery,
   useGetArchiveTasksQuery,
   useDeleteTaskMutation,

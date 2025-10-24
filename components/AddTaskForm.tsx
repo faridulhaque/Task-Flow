@@ -13,7 +13,7 @@ function AddTaskForm() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const title = e.currentTarget.title.value;
-    const description = e.currentTarget.description.value;
+    const description = 'n/a';
     const time = e.currentTarget.time.value;
     const date = e.currentTarget.date.value;
     const complete = false;
@@ -65,7 +65,7 @@ function AddTaskForm() {
         />
       </div>
 
-      <div className="w-full ">
+      {/* <div className="w-full ">
         <label className="relative block text-gray-300 mb-2 text-sm font-medium">
           Description
         </label>
@@ -78,7 +78,7 @@ function AddTaskForm() {
         <label className="relative block text-gray-300 mb-2 text-xs">
           Max 150 characters
         </label>
-      </div>
+      </div> */}
 
       <div className="w-full">
         <label className="block text-gray-300 mb-2 text-sm font-medium">
@@ -97,7 +97,7 @@ function AddTaskForm() {
           Date
         </label>
         <input
-          min={today}
+          // min={today}
           type="date"
           name="date"
           placeholder="Enter task title"

@@ -1,12 +1,113 @@
+"use client";
 import Navbar from "@/components/Navbar";
+import PreviousTask from "@/components/PreviousTask";
 import TodayTask from "@/components/TodayTask";
+import UpcomingTasks from "@/components/UpcomingTasks";
+import {
+  useChangeStatusMutation,
+  useDeleteTaskMutation,
+  useGetArchiveTasksQuery,
+  useGetTodayTaskQuery,
+  useGetUpcomingTasksQuery,
+} from "@/services/queries/othersApi";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import notTaskFound from "ntf.webp";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [deleteTask, { isLoading: deleting }] = useDeleteTaskMutation<any>();
+  const [isData, setData] = useState(1);
+  const [changeStatus, { isLoading: changing }] = useChangeStatusMutation();
+  const [email, setEmail] = useState(null);
+
+  const { data: archivedTasks, isLoading: atLoading } =
+    useGetArchiveTasksQuery<any>(email);
+  const { data: TodayTasks, isLoading: ttLoading } =
+    useGetTodayTaskQuery<any>(email);
+
+  const { data: upcomingTasks, isLoading: uTasksLoading } =
+    useGetUpcomingTasksQuery<any>(email);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+
+    if (user) {
+      setEmail(user.email);
+    }
+  }, []);
+
+  const router = useRouter();
+
+  const handleDeleteTask = async (id: string) => {
+    try {
+      await deleteTask(id);
+      toast.success("Task deleted successfully");
+    } catch (error) {
+      toast.error("Operation Failed");
+    }
+  };
+
+  const handleChangeStatus = async (id: string) => {
+    try {
+      const result: any = await changeStatus(id);
+      if (result?.data?.complete === false) {
+        toast.success("Task marked as incomplete");
+      } else if (result?.data?.complete === true) {
+        toast.success("Task marked as complete");
+      }
+    } catch (error) {
+      toast.error("Operation Failed");
+    }
+  };
+  console.log("isdata", isData);
   return (
     <div className="min-h-screen bg-gray-800 text-white flex flex-col">
-      <Navbar />
-      <TodayTask></TodayTask>
+      <>
+        <Navbar />
+        {!isData ? (
+          <div className="w-11/12 max-w-md bg-gray-700 py-10 px-6 mx-auto mt-20 rounded-lg shadow-xl space-y-6 flex flex-col items-center justify-center">
+            <Image height={300} width={300} src="/ntf.webp" alt="Not found" />
+            <button
+              onClick={() => router.push("/entry")}
+              className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition cursor-pointer"
+            >
+              Add Task
+            </button>
+          </div>
+        ) : (
+          <>
+            <TodayTask
+              data={TodayTasks}
+              dataLoading={ttLoading}
+              email={email}
+              deleteTask={handleDeleteTask}
+              changeStatus={handleChangeStatus}
+              changing={changing}
+              deleting={deleting}
+            ></TodayTask>
+            <UpcomingTasks
+              data={upcomingTasks}
+              dataLoading={uTasksLoading}
+              email={email}
+              deleteTask={deleteTask}
+              changeStatus={changeStatus}
+              changing={changing}
+              deleting={deleting}
+            ></UpcomingTasks>
+            <PreviousTask
+              data={archivedTasks}
+              dataLoading={atLoading}
+              email={email}
+              deleteTask={deleteTask}
+              changeStatus={changeStatus}
+              changing={changing}
+              deleting={deleting}
+            ></PreviousTask>
+          </>
+        )}
+      </>
     </div>
   );
 }
