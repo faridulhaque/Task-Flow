@@ -19,7 +19,19 @@ function TodayTask({
   if (dataLoading) return <Loader></Loader>;
   return (
     <div className="w-11/12 max-w-md bg-gray-700 py-10 px-6 mx-auto mt-20 rounded-lg shadow-xl space-y-6">
-      <h2 className="text-md font-semibold mb-6">Today</h2>
+      <h2 className="text-md font-semibold mb-6 flex items-center justify-between">
+        <span>Today</span>
+        {data?.length ? (
+          <button
+            onClick={() => router.push("/entry")}
+            className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition cursor-pointer"
+          >
+            Add New Task
+          </button>
+        ) : (
+          <></>
+        )}
+      </h2>
 
       {data?.length ? (
         <>
