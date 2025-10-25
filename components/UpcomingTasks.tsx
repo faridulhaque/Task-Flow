@@ -5,16 +5,19 @@ import {
 } from "@/services/queries/othersApi";
 import { TaskPayload, TTaskListComponent } from "@/services/types";
 import React, { useEffect, useState } from "react";
+import Loader from "./Loader";
 
 function UpcomingTasks({
   email,
   deleteTask,
-  dataLoading,
-  data,
-  changeStatus,
   deleting,
+  data,
+  dataLoading,
+  changeStatus,
   changing,
 }: TTaskListComponent) {
+  if (dataLoading) return <Loader></Loader>;
+
   return (
     <div className="w-11/12 max-w-md bg-gray-700 py-10 px-6 mx-auto mt-10 rounded-lg shadow-xl space-y-6">
       <h2 className="text-md font-semibold mb-6">Upcoming</h2>

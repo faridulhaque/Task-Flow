@@ -2,22 +2,24 @@
 import { useGetArchiveTasksQuery } from "@/services/queries/othersApi";
 import { TaskPayload, TTaskListComponent } from "@/services/types";
 import React, { useEffect, useState } from "react";
+import Loader from "./Loader";
 
 function PreviousTask({
   email,
   deleteTask,
   changeStatus,
   data,
+  dataLoading,
   deleting,
   changing,
 }: TTaskListComponent) {
+  if (dataLoading) return <Loader></Loader>;
 
   return (
     <div className="w-11/12 max-w-md bg-gray-700 py-10 px-6 mx-auto mt-10 rounded-lg shadow-xl space-y-6">
       <h2 className="text-md font-semibold mb-6">Previous</h2>
 
       {data?.map((d: TaskPayload) => {
-        
         return (
           <div
             key={d?._id}
